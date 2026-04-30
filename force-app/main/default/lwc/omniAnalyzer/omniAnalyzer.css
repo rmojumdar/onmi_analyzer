@@ -1,0 +1,33 @@
+.result-box {
+    background: #f4f6f9;
+    border: 1px solid #dddbda;
+    border-radius: 4px;
+    padding: 16px;
+    min-height: 200px;
+    font-size: 14px;
+    line-height: 1.6;
+    white-space: pre-wrap;
+}
+
+.result-box h2 {
+    font-size: 16px;
+    font-weight: bold;
+    margin: 12px 0 6px 0;
+    color: #032d60;
+}
+
+.result-box h3 {
+    font-size: 14px;
+    font-weight: bold;
+    margin: 10px 0 4px 0;
+    color: #032d60;
+}
+
+.result-box ul {
+    padding-left: 20px;
+    margin: 4px 0;
+}
+
+.result-box li {
+    margin-bottom: 4px;
+}

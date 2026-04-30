@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<GenAiPromptTemplate xmlns="http://soap.sforce.com/2006/04/metadata">
+    <activeVersionIdentifier>WH4m+34W/tUci2bkFxFZuJAcGyJRukP28/KXHQ9i+70=_7</activeVersionIdentifier>
+    <developerName>OmniAnalyzer_Documentation</developerName>
+    <masterLabel>OmniAnalyzer Documentation</masterLabel>
+    <overridable>false</overridable>
+    <templateVersions>
+        <content>You are a Salesforce OmniStudio expert. Analyze the following OmniStudio component metadata and generate clear technical documentation.
+{!$Input:componentType}
+{!$Input:metadata}
+
+FORMATTING RULES:                                                        
+ - Use section headers with ##                                                  
+ - No blank lines between list items                                               
+ - Keep descriptions concise — one line per item where possible                                  
+ - Do not add extra blank lines between sections                                         
+                                                                  
+ Generate documentation using this structure:     
+
+ ## Overview                                                           
+ 2-3 sentences describing what this component does, its business purpose, and where it fits in the solution.      
+
+ ## Component Details                                                       
+ - **Name:** [value]                                                       
+ - **Type:** [value]                                                       
+ - **Sub-Type:** [value]                                                     
+ - **Version:** [value]                                                      
+ - **Status:** Active / Inactive                                                 
+ - **Rollback on Error:** Yes / No                                                
+                                                                  
+ ## Inputs                                                            
+ For each input: **[Name]** ([Type], [Required/Optional]) — [Description]. Default: [value if any]                
+                                                                  
+ ## Outputs                                                            
+ For each output: **[Name]** ([Type]) — [Description]
+                                                                  
+ ## Dependencies                                                         
+ For each dependency: **[Type]:** [Name] — [Purpose]                                       
+ If none: No external dependencies.                                                
+                                                                  
+ ## Field Mappings                                                        
+ (Data Mappers only) For each mapping: **[Source Field]** → [Target Object].[Target Field] ([Transformation if any])       
+                                                                  
+ ## Flow Summary                                                         
+ Numbered steps describing the logic flow. Be specific about conditions, transformations, and decision points.                                                                
+
+</content>
+        <fileDroppingStrategy>{&quot;dropFilesBy&quot;:&quot;LAST_MODIFIED_DATE&quot;,&quot;dropFileStartingWith&quot;:&quot;OLDEST&quot;}</fileDroppingStrategy>
+        <inputs>
+            <apiName>componentType</apiName>
+            <definition>primitive://String</definition>
+            <masterLabel>componentType</masterLabel>
+            <referenceName>Input:componentType</referenceName>
+            <required>false</required>
+        </inputs>
+        <inputs>
+            <apiName>metadata</apiName>
+            <definition>primitive://String</definition>
+            <masterLabel>metadata</masterLabel>
+            <referenceName>Input:metadata</referenceName>
+            <required>false</required>
+        </inputs>
+        <isCitationEnabled>false</isCitationEnabled>
+        <primaryModel>sfdc_ai__DefaultGPT4OmniMini</primaryModel>
+        <status>Published</status>
+        <versionIdentifier>WH4m+34W/tUci2bkFxFZuJAcGyJRukP28/KXHQ9i+70=_7</versionIdentifier>
+    </templateVersions>
+    <type>einstein_gpt__flex</type>
+    <visibility>Global</visibility>
+</GenAiPromptTemplate>

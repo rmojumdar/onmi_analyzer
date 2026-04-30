@@ -1,0 +1,116 @@
+<template>
+    <lightning-card title="OmniStudio Component Analyzer" icon-name="standard:einstein">
+        <div class="slds-p-around_medium">
+
+            <!-- Component Type Selection -->
+            <div class="slds-form-element slds-m-bottom_medium">
+                <label class="slds-form-element__label slds-text-title_bold">Component Type</label>
+                <div class="slds-form-element__control">
+                    <lightning-radio-group
+                        name="componentType"
+                        label="Component Type"
+                        variant="label-hidden"
+                        options={componentTypeOptions}
+                        value={selectedComponentType}
+                        type="radio"
+                        onchange={handleComponentTypeChange}>
+                    </lightning-radio-group>
+                </div>
+            </div>
+
+            <!-- Metadata Input -->
+            <div class="slds-form-element slds-m-bottom_medium">
+                <label class="slds-form-element__label slds-text-title_bold">
+                    Paste Component Metadata (XML)
+                </label>
+                <div class="slds-form-element__control">
+                    <lightning-textarea
+                        name="metadata"
+                        label="Component Metadata"
+                        variant="label-hidden"
+                        placeholder="Paste your OmniStudio component XML metadata here..."
+                        value={metadata}
+                        rows="12"
+                        onchange={handleMetadataChange}>
+                    </lightning-textarea>
+                </div>
+            </div>
+
+            <!-- Analyze Button -->
+            <div class="slds-m-bottom_medium">
+                <lightning-button
+                    label="Analyze Component"
+                    variant="brand"
+                    icon-name="utility:einstein"
+                    onclick={handleAnalyze}
+                    disabled={isAnalyzing}>
+                </lightning-button>
+                <template if:true={isAnalyzing}>
+                    <lightning-spinner
+                        alternative-text="Analyzing..."
+                        size="small"
+                        class="slds-m-left_small">
+                    </lightning-spinner>
+                    <span class="slds-m-left_small slds-text-color_weak">Analyzing with Einstein AI...</span>
+                </template>
+            </div>
+
+            <!-- Error -->
+            <template if:true={errorMessage}>
+                <div class="slds-notify slds-notify_alert slds-theme_error slds-m-bottom_medium" role="alert">
+                    <span>{errorMessage}</span>
+                </div>
+            </template>
+
+            <!-- Results -->
+            <template if:true={showResults}>
+                <div class="slds-m-top_medium">
+                    <lightning-tabset>
+
+                        <!-- Documentation Tab -->
+                        <lightning-tab label="Documentation" icon-name="utility:description">
+                            <div class="slds-p-around_medium">
+                                <div class="slds-m-bottom_small">
+                                    <lightning-button
+                                        label="Copy"
+                                        variant="neutral"
+                                        icon-name="utility:copy"
+                                        onclick={handleCopyDocumentation}
+                                        size="small">
+                                    </lightning-button>
+                                </div>
+                                <div class="result-box">
+                                    <lightning-formatted-rich-text
+                                        value={documentationResult}>
+                                    </lightning-formatted-rich-text>
+                                </div>
+                            </div>
+                        </lightning-tab>
+
+                        <!-- Best Practice Audit Tab -->
+                        <lightning-tab label="Best Practice Audit" icon-name="utility:check">
+                            <div class="slds-p-around_medium">
+                                <div class="slds-m-bottom_small">
+                                    <lightning-button
+                                        label="Copy"
+                                        variant="neutral"
+                                        icon-name="utility:copy"
+                                        onclick={handleCopyAudit}
+                                        size="small">
+                                    </lightning-button>
+                                </div>
+                                <div class="result-box">
+                                    <lightning-formatted-rich-text
+                                        value={auditResult}>
+                                    </lightning-formatted-rich-text>
+                                </div>
+                            </div>
+                        </lightning-tab>
+
+                    </lightning-tabset>
+                </div>
+            </template>
+
+        </div>
+    </lightning-card>
+</template>

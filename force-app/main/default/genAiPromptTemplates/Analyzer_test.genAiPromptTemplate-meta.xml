@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<GenAiPromptTemplate xmlns="http://soap.sforce.com/2006/04/metadata">
+    <developerName>Analyzer_test</developerName>
+    <masterLabel>Analyzer_test</masterLabel>
+    <overridable>false</overridable>
+    <templateVersions>
+        <content>test text
+</content>
+        <isCitationEnabled>false</isCitationEnabled>
+        <status>Draft</status>
+        <versionIdentifier>WH4m+34W/tUci2bkFxFZuJAcGyJRukP28/KXHQ9i+70=_1</versionIdentifier>
+    </templateVersions>
+    <type>einstein_gpt__flex</type>
+    <visibility>Global</visibility>
+</GenAiPromptTemplate>

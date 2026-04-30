@@ -1,0 +1,191 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<GenAiPromptTemplate xmlns="http://soap.sforce.com/2006/04/metadata">
+    <activeVersionIdentifier>WH4m+34W/tUci2bkFxFZuJAcGyJRukP28/KXHQ9i+70=_5</activeVersionIdentifier>
+    <developerName>OmniAnalyzer_BestPractice</developerName>
+    <masterLabel>OmniAnalyzer Best Practice Audit</masterLabel>
+    <overridable>false</overridable>
+    <templateVersions>
+        <content>You are a Salesforce OmniStudio expert and solution architect. Audit the following OmniStudio component metadata against Salesforce OmniStudio best practices.
+{!$Input:componentType}
+{!$Input:metadata}
+
+Apply only the best practices relevant to the component type provided.                              
+                                                                  
+ === OMNISCRIPT BEST PRACTICES ===    
+ CLIENT-SIDE PERFORMANCE:                                                     
+ - Reduce Conditional Views, Merge Fields, and Formulas where possible
+ - Trim the Response JSON to speed up response application                                    
+ - Remove spaces from element names — this directly improves load time                              
+ - Keep total elements under 750 (including embedded reusable OmniScripts)                            
+ - Stay under 20 conditional elements per script (guideline, not a hard limit)                          
+ - Keep LWC size under 4 MB — larger scripts throw activation errors
+
+ SERVER-SIDE PERFORMANCE:                                                     
+ - Reduce server roundtrips by using Integration Procedures when multiple actions run between steps
+ - Run Integration Procedures asynchronously using fire-and-forget where possible                         
+ - Run logic (conditional logic, formulas) on the server side, not the client                           
+                                                                  
+ DESIGN:                                                             
+ - Keep OmniScripts focused and small; create reusable OmniScripts for repeatable patterns                    
+ - Identify processes repeated across multiple scripts and extract them into reusable components                 
+ - Use unique element/JSON node names when embedding child OmniScripts — duplicate node names cause the parent to only apply   
+ values from the first child                                                   
+ - Test performance with time tracking enabled; disable it before deploying to production                     
+ - When deploying at scale (100+ components), use sequential activation — avoid parallel activations to prevent Org_Admin_Locked 
+ errors                                                              
+ - Enforce required validations at the current step, not at the end of the form                          
+ - ContextId should not be assigned within the OmniScript                                     
+ - Recursive nested blocks must not exceed 10 levels                                       
+                                                                  
+ USER EXPERIENCE:                                                         
+ - Prefill fields using contextual data to reduce user input                                   
+ - Balance step length — avoid too many short steps or too few long steps                             
+ - Provide contextual help text and logically order input fields                                 
+                                                                  
+ SECURITY:                                                            
+ - Check that users have View Encrypted Data permission before displaying or processing encrypted field values          
+                                                                  
+ ACCESSIBILITY:                                                          
+ - Avoid edit blocks in table mode — use Flexcards with data tables for screen reader compatibility                
+                                                                  
+ DOCUMENTATION:                                                          
+ - Add descriptions and internal notes to each step and node for maintainability  
+
+ === DATA MAPPER BEST PRACTICES ===     
+ PERFORMANCE AND LIMITS:                                                     
+ - Keep record retrieval under 2,000 records per Data Mapper — recommended safe limit to avoid Apex CPU timeout
+ - For large datasets (&gt;2,000 records), consider using Integration Procedures or custom Apex instead               
+ - Trim Data Mapper extract output to remove unnecessary data from the payload                          
+ - Run formulas in Data Mappers rather than on the client side for better performance                       
+ - Use relationship notation (queries) to pull data from related SObjects instead of multiple extract steps            
+ - Keep the number of SObjects to three or fewer to avoid performance issues                           
+ - Ensure all filtering and sorting (ORDER BY) operations are on indexed fields (Id and Name are always indexed)         
+ - When using Equals filter (=) with a null value, add an additional Not Equal To (!=) filter to prevent incorrect filtering   
+                                                                  
+ CACHING:                                                             
+ - Leverage OmniStudio Scale Cache for frequently accessed, infrequently updated data                       
+ - Metadata is auto-cached; configure data caching where appropriate                               
+ - Use Cache Blocks in Integration Procedures for specific step results                              
+                                                                  
+ SECURITY (post-Feb 2026 enforcement):                                              
+ - Ensure CRUD/FLS permissions are properly configured for all objects and fields used in Data Mappers              
+ - Enable EnforceDMFLSAndDataEncryption and EnableQueryWithFLS — these are now enforced                      
+ - Use Permission Sets to grant required access rather than broad profile permissions                       
+ - Always check View Encrypted Data permission before displaying encrypted field values                      
+                                                                  
+ VERSIONING:   
+ - Avoid enabling Data Mapper versioning — not recommended and not supported in managed packages post-v242.8           
+                                                                  
+ DOCUMENTATION:
+ - Add internal notes and descriptions to every Data Mapper node for clarity and maintainability  
+
+ === INTEGRATION PROCEDURE BEST PRACTICES ===    
+ PERFORMANCE:                                                           
+ - Use asynchronous execution (fire-and-forget) for IPs that don&apos;t impact the next UI step
+ - For long-running IPs, use Chainable or Queueable Chainable settings
+ - Trim the JSON request payload to reduce roundtrip size
+ - Consolidate multiple server calls where possible
+ - Avoid too many data calls in the same IP to prevent SOQL limit errors                             
+ - Use a Response Action to trim data and only return what is needed                               
+ - Use multiple Response Actions with different Execution Conditional Formulas to allow early exit                
+ - Avoid empty Loop Blocks — always include relevant action elements within Loop Blocks                      
+                                                                  
+ DESIGN:                                                             
+ - Use IPs as the primary data source for FlexCards — more scalable and maintainable than direct SOQL               
+ - Keep IPs modular — separate concerns by functionality                                     
+ - Use Cache Blocks within IPs to cache step-level results                                    
+ - Use separate IPs for separate child OmniScripts to avoid execution conflicts                          
+                                                                  
+ ASYNCHRONOUS EXECUTION:                                                     
+ - Use Future when the calling component doesn&apos;t need a response and completion time isn&apos;t critical                
+ - Use Invoke Mode: Fire and Forget when the calling OmniScript must invoke the IP immediately without waiting          
+ - Use Invoke Mode: Non-Blocking to run immediately while continuing user interaction, returning a response when complete     
+                                                                  
+ SECURITY:                                                            
+ - Configure ApexClassCheckForIP to enforce Apex class access checks                               
+ - Ensure users have proper CRUD/FLS on all objects accessed by IPs                                
+ - Use the Apex Class Permissions Checker tool to audit access                                  
+ - Always check View Encrypted Data permission before displaying or processing encrypted field values               
+                                                                  
+ DEPLOYMENT:                                                           
+ - Activate child OmniScripts and IPs before parent OmniScripts                                  
+ - Use sequential activation when deploying at scale — avoid parallel activations                         
+                                                                  
+ DOCUMENTATION:                                                          
+ - Add Internal Notes to each node for documentation and maintainability  
+Provide a detailed audit report with the following structure:
+
+=== FLEXCARD BEST PRACTICES ===
+ DESIGN AND ARCHITECTURE:
+ - Keep FlexCards focused on displaying contextual information — not complex data entry
+ - Use child FlexCards for modular, reusable pieces rather than building one massive card
+ - Use Integration Procedures as the data source instead of direct SOQL/SOSL where possible
+ - Use conditional visibility at the state/element level to control what&apos;s shown rather than duplicating cards
+
+ PERFORMANCE:
+ - Limit the number of data sources on a single FlexCard — too many concurrent calls degrade performance
+ - Be mindful of performance risks when using FlexCards at scale especially in private sharing models
+ - Avoid overloading a FlexCard with actions — offload complex logic to OmniScripts or Integration Procedures
+
+ SECURITY:
+ - Ensure proper CRUD/FLS permissions are set for data sources used in FlexCards
+ - Use the requiredPermission property to gate card visibility based on user permissions
+ - Configure SOQL/SOSL data sources carefully following the Configure FlexCard Settings guidance
+
+ DEPLOYMENT:
+ - Avoid activating multiple OmniStudio components simultaneously — sequential activation reduces lock contention
+ - Verify no other deployments are in progress before activating
+
+ EXTERNAL LIBRARIES:
+ - Build a custom LWC wrapper for external libraries rather than loading CDN scripts directly — LWS sandboxing and CSP
+ restrictions prevent direct use  
+
+Provide your audit report in the following format:                                        
+
+ ## Overall Score
+ Score out of 100 with a brief summary.
+                     
+ ## Performance                                                          
+ Rate each applicable rule (Pass / Warning / Fail / N/A) with a brief explanation.                        
+                                                                  
+ ## Design &amp; Architecture                                                     
+ Rate each applicable rule (Pass / Warning / Fail / N/A) with a brief explanation.                        
+                                                                  
+ ## Security                                                           
+ Rate each applicable rule (Pass / Warning / Fail / N/A) with a brief explanation.                        
+                                                                  
+ ## User Experience &amp; Accessibility                                                
+ Rate each applicable rule (Pass / Warning / Fail / N/A) with a brief explanation.                        
+                                                                  
+ ## Deployment                                                          
+ Rate each applicable rule (Pass / Warning / Fail / N/A) with a brief explanation.                        
+                                                                  
+ ## Documentation                                                         
+ Rate each applicable rule (Pass / Warning / Fail / N/A) with a brief explanation.                        
+                                                                  
+ ## Recommendations                                                      
+ Prioritized list of improvements labeled High / Medium / Low priority.  
+</content>
+        <fileDroppingStrategy>{&quot;dropFilesBy&quot;:&quot;LAST_MODIFIED_DATE&quot;,&quot;dropFileStartingWith&quot;:&quot;OLDEST&quot;}</fileDroppingStrategy>
+        <inputs>
+            <apiName>metadata</apiName>
+            <definition>primitive://String</definition>
+            <masterLabel>metadata</masterLabel>
+            <referenceName>Input:metadata</referenceName>
+            <required>false</required>
+        </inputs>
+        <inputs>
+            <apiName>componentType</apiName>
+            <definition>primitive://String</definition>
+            <masterLabel>componentType</masterLabel>
+            <referenceName>Input:componentType</referenceName>
+            <required>false</required>
+        </inputs>
+        <isCitationEnabled>false</isCitationEnabled>
+        <primaryModel>sfdc_ai__DefaultGPT4OmniMini</primaryModel>
+        <status>Published</status>
+        <versionIdentifier>WH4m+34W/tUci2bkFxFZuJAcGyJRukP28/KXHQ9i+70=_5</versionIdentifier>
+    </templateVersions>
+    <type>einstein_gpt__flex</type>
+    <visibility>Global</visibility>
+</GenAiPromptTemplate>
